@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Landlord Compliance Tool — Avoid Costly Mistakes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #2d8a4e;
+      --green-dark: #236b3d;
+      --green-light: #e8f5e9;
+      --dark: #1a1a1a;
+      --muted: #555;
+      --light-bg: #fafafa;
+      --border: #e0e0e0;
+      --white: #ffffff;
+      --warning: #f9a825;
+      --max-w: 640px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--dark);
+      background: var(--light-bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--white);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: left;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      width: 100%;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .urgency {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .urgency .icon { font-size: 1.3rem; }
+
+    .hero p.subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      max-width: 520px;
+    }
+
+    /* ── Pain points ── */
+    .pain-header {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .pain-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .pain-list li {
+      padding: 0.35rem 0;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .pain-list li .check {
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── CTAs ── */
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      border: none;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--green-dark); }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--dark);
+      border: 2px solid var(--dark);
+    }
+
+    .btn-secondary:hover { background: var(--light-bg); }
+
+    .trust-line {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .audience-line {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── Problem Section ── */
+    .section {
+      padding: 3rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .section-inner {
+      max-width: var(--max-w);
+      width: 100%;
+    }
+
+    .section-alt { background: var(--white); }
+
+    .section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Stats grid ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--green-light);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── Features ── */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .feature .icon-box {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--green-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .feature h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .feature p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ── Pricing teaser ── */
+    .pricing-teaser {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .pricing-teaser .price-range {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--green);
+      margin: 0.5rem 0;
+    }
+
+    .pricing-teaser .price-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-item summary {
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+
+    .faq-item[open] summary::after {
+      content: '-';
+    }
+
+    .faq-item p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── Final CTA ── */
+    .final-cta {
+      background: var(--dark);
+      color: var(--white);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .final-cta p {
+      color: #aaa;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .final-cta .btn-primary {
+      max-width: 320px;
+      margin: 0 auto 0.75rem;
+      display: block;
+    }
+
+    .final-cta .btn-secondary {
+      max-width: 320px;
+      margin: 0 auto;
+      display: block;
+      color: var(--white);
+      border-color: var(--white);
+      background: transparent;
+    }
+
+    .final-cta .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem 1.5rem 5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: var(--light-bg);
+    }
+
+    /* ── Sticky mobile CTA ── */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    }
+
+    .sticky-cta .btn {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* ── Spots counter ── */
+    .spots-bar {
+      background: var(--green-light);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .spots-bar .progress-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .spots-bar .progress-fill {
+      height: 100%;
+      width: 65%;
+      background: var(--green);
+      border-radius: 4px;
+    }
+
+    .spots-bar .spots-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--green-dark);
+    }
+
+    /* ── Social proof ── */
+    .social-proof {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .avatar-stack {
+      display: flex;
+    }
+
+    .avatar-stack span {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 2px solid var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      margin-left: -8px;
+    }
+
+    .avatar-stack span:first-child { margin-left: 0; }
+
+    /* ── Responsive ── */
+    @media (min-width: 600px) {
+      .hero { padding: 4.5rem 2rem 3rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .features { grid-template-columns: 1fr 1fr; }
+      .cta-group { flex-direction: row; }
+      .btn { width: auto; }
+      .sticky-cta { display: none; }
+      footer { padding-bottom: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Avoid &pound;7,000 compliance mistakes</h1>
+      <p class="subtitle">
+        We're building a simple tool to help UK landlords stay compliant, manage rent increases, and avoid costly mistakes.
+      </p>
+
+      <div class="spots-bar">
+        <div class="spots-text">7 of 20 spots left</div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+      </div>
+
+      <p class="pain-header">Sound familiar?</p>
+      <ul class="pain-list">
+        <li><span class="check">&#10003;</span> Served a Section 21 that got thrown out?</li>
+        <li><span class="check">&#10003;</span> Rent increase challenged at tribunal?</li>
+        <li><span class="check">&#10003;</span> Deposit claim that didn't hold up?</li>
+        <li><span class="check">&#10003;</span> Repair liability you didn't know you had?</li>
+      </ul>
+
+      <div class="cta-group">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/viewform" class="btn btn-primary" id="main-cta">Get Free Compliance Checklist (60 sec)</a>
+      </div>
+
+      <div class="social-proof">
+        <div class="avatar-stack">
+          <span>JT</span><span>RM</span><span>KP</span>
+        </div>
+        13 landlords already signed up
+      </div>
+
+      <p class="trust-line">No spam. No payment required. Takes 60 seconds.</p>
+      <p class="audience-line">Built for UK landlords managing 1&ndash;10+ properties</p>
+    </div>
+  </section>
+
+  <!-- Why this matters -->
+  <section class="section">
+    <div class="section-inner">
+      <h2>The Renters' Rights Act changes everything</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="number">&pound;7,000</div>
+          <div class="label">Potential penalty per tenancy</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">Section 21</div>
+          <div class="label">Being abolished</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">New rules</div>
+          <div class="label">On rent increases &amp; repairs</div>
+        </div>
+      </div>
+      <p style="color: var(--muted); font-size: 0.95rem;">
+        Most landlords don't realise they're already non-compliant. One missed step on a deposit, a badly-timed rent notice, or a repair you didn't document &mdash; and you're exposed.
+      </p>
+    </div>
+  </section>
+
+  <!-- What we're building -->
+  <section class="section section-alt">
+    <div class="section-inner">
+      <h2>What we're building</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="icon-box">&#128203;</div>
+          <div>
+            <h4>Compliance automation</h4>
+            <p>Stay on top of every legal requirement without spreadsheets or guesswork.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon-box">&#128200;</div>
+          <div>
+            <h4>Rent increase management</h4>
+            <p>Properly structured notices that won't get thrown out at tribunal.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon-box">&#128451;</div>
+          <div>
+            <h4>Evidence tracking</h4>
+            <p>Document repairs, communications, and compliance steps in one place.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon-box">&#128276;</div>
+          <div>
+            <h4>Deadline alerts</h4>
+            <p>Never miss a gas safety check, deposit protection deadline, or EPC renewal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-teaser">
+        <p style="font-size: 0.9rem; color: var(--muted);">Planned pricing</p>
+        <div class="price-range">&pound;9 &ndash; &pound;29/month</div>
+        <p class="price-note">Early access members lock in the lowest tier</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="section-inner">
+      <h2>Common questions</h2>
+      <details class="faq-item">
+        <summary>Is the &pound;5 refundable?</summary>
+        <p>Yes, 100%. It's refunded when we launch. It simply reserves your spot in the first 20 early-access users.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What do I get with the free checklist?</summary>
+        <p>A practical compliance checklist covering the key requirements under the Renters' Rights Act &mdash; deposit protection, Section 21 changes, rent increase rules, and repair obligations.</p>
+      </details>
+      <details class="faq-item">
+        <summary>When does the tool launch?</summary>
+        <p>We're building based on direct feedback from early users. Early access members will be the first to try it and shape the product.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How many properties do I need?</summary>
+        <p>Whether you manage 1 property or 10+, compliance applies the same. The tool is designed for landlords at any scale.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta" id="reserve">
+    <h2>Don't wait for a tribunal letter</h2>
+    <p>Join the first 20 landlords getting ahead of the Renters' Rights Act.</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/viewform" class="btn btn-primary">Get Free Compliance Checklist (60 sec)</a>
+    <p style="color:#aaa; font-size:0.85rem; margin-top:1rem;">No payment required. No spam. Unsubscribe anytime.</p>
+  </section>
+
+  <footer>
+    &copy; 2026 &middot; Built for UK landlords &middot; No spam, ever.
+  </footer>
+
+  <!-- Sticky mobile CTA -->
+  <div class="sticky-cta">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/viewform" class="btn btn-primary">Get Free Checklist &rarr;</a>
+  </div>
+
+</body>
+</html>
