@@ -10,6 +10,7 @@
   <!-- 100% privacy-first analytics -->
   <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <script async src="https://scripts.simpleanalyticscdn.com/auto-events.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     @page { size: A4; margin: 1.5cm; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -819,9 +820,9 @@
 
     <!-- Toolbar -->
     <div class="toolbar" id="toolbar">
-      <button onclick="printChecklist()" title="Save as PDF">Print / Save PDF</button>
+      <button class="btn-save" onclick="downloadChecklistPdf()" title="Save your ticks and download a PDF">Save / Download PDF</button>
       <button onclick="resetAll()" title="Clear all ticks">Reset All</button>
-      <button class="btn-save" onclick="saveProgress()" title="Save to this device">Save Progress</button>
+      <button onclick="saveProgress()" title="Save to this device">Save Progress</button>
     </div>
 
     <!-- Progress bar -->
@@ -1222,13 +1223,21 @@
     }
 
     // ── Save / Load / Reset ──
-    function saveProgress() {
+    function getChecklistState() {
       const state = [];
-      document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(function(cb, i) {
+      document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(function(cb) {
         state.push(cb.checked);
       });
+      return state;
+    }
+
+    function saveProgress(showFeedback) {
+      const state = getChecklistState();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      showToast('Progress saved to this device.');
+      if (showFeedback !== false) {
+        showToast('Progress saved to this device.');
+      }
+      return state;
     }
 
     function loadProgress() {
@@ -1254,9 +1263,144 @@
       showToast('Checklist reset.');
     }
 
-    // ── Print ──
-    function printChecklist() {
-      window.print();
+    function addPdfLine(doc, text, x, y, maxWidth, lineHeight) {
+      const lines = doc.splitTextToSize(text, maxWidth);
+      doc.text(lines, x, y);
+      return y + (lines.length * lineHeight);
+    }
+
+    function buildChecklistPdf(doc, state) {
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 40;
+      const contentWidth = pageWidth - (margin * 2);
+      const lineHeight = 16;
+      let y = 52;
+
+      function ensureSpace(heightNeeded) {
+        if (y + heightNeeded <= pageHeight - margin) return;
+        doc.addPage();
+        y = 52;
+      }
+
+      const checked = state.filter(Boolean).length;
+      const lead = JSON.parse(localStorage.getItem(LEAD_STORAGE_KEY) || 'null');
+      let itemIndex = 0;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(20);
+      doc.text('Rental Haven Checklist 2026', margin, y);
+      y += 28;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      y = addPdfLine(
+        doc,
+        'Generated ' + new Date().toLocaleDateString('en-GB') + ' | ' +
+          checked + ' of ' + TOTAL_ITEMS + ' completed' +
+          (lead && lead.name ? ' | ' + lead.name : ''),
+        margin,
+        y,
+        contentWidth,
+        13
+      );
+      y += 10;
+
+      document.querySelectorAll('.checklist-section').forEach(function(section) {
+        const heading = section.querySelector('.section-header h2');
+        if (!heading) return;
+
+        ensureSpace(30);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        y = addPdfLine(doc, heading.textContent.trim(), margin, y, contentWidth, lineHeight);
+        y += 4;
+
+        section.querySelectorAll('.checklist-item').forEach(function(item) {
+          const label = item.querySelector('label');
+          if (!label) return;
+
+          const indent = item.closest('.sub-items') ? 18 : 0;
+          const isChecked = Boolean(state[itemIndex]);
+          itemIndex += 1;
+          const prefix = isChecked ? '[x] ' : '[ ] ';
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(11);
+          ensureSpace(28);
+          y = addPdfLine(
+            doc,
+            prefix + label.textContent.trim(),
+            margin + indent,
+            y,
+            contentWidth - indent,
+            lineHeight
+          );
+          y += 3;
+        });
+
+        y += 10;
+      });
+
+      ensureSpace(40);
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(9);
+      addPdfLine(
+        doc,
+        'Rental Haven | For guidance only. Confirm requirements for your tenancy before acting.',
+        margin,
+        y,
+        contentWidth,
+        12
+      );
+    }
+
+    async function downloadChecklistPdf() {
+      const jspdf = window.jspdf;
+      if (!jspdf || !jspdf.jsPDF) {
+        showToast('PDF export unavailable. Please try again.');
+        return;
+      }
+
+      const state = saveProgress(false);
+      const doc = new jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+      const fileName = 'rental-haven-checklist-2026.pdf';
+      buildChecklistPdf(doc, state);
+
+      const blob = doc.output('blob');
+      const isTouchDevice = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+      const canShareFile = isTouchDevice &&
+        typeof File === 'function' &&
+        navigator.canShare &&
+        navigator.canShare({
+          files: [new File([blob], fileName, { type: 'application/pdf' })]
+        });
+
+      if (canShareFile) {
+        try {
+          await navigator.share({
+            title: 'Rental Haven Checklist',
+            text: 'Save or share your checklist PDF.',
+            files: [new File([blob], fileName, { type: 'application/pdf' })]
+          });
+          showToast('Checklist ready to save or share.');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      if (isIOS) {
+        const blobUrl = doc.output('bloburl');
+        window.open(blobUrl, '_blank');
+        showToast('Progress saved. PDF opened for saving.');
+        return;
+      }
+
+      doc.save(fileName);
+      showToast('Progress saved. PDF downloaded.');
     }
 
     // ── Gate price selection ──
