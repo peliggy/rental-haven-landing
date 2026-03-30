@@ -935,20 +935,19 @@
         return;
       }
 
-      // Store lead locally (you can later send this to Google Forms / API)
+      // Store lead locally
       const leads = JSON.parse(localStorage.getItem('rh_leads') || '[]');
       leads.push({ name, email, date: new Date().toISOString() });
       localStorage.setItem('rh_leads', JSON.stringify(leads));
 
-      // Submit to Google Forms silently (replace with your form URL)
-      // Uncomment and replace YOUR_FORM_ID and entry.XXXXX with your actual values:
-      // const formUrl = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
-      // fetch(formUrl, {
-      //   method: 'POST',
-      //   mode: 'no-cors',
-      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      //   body: `entry.XXXXX=${encodeURIComponent(name)}&entry.XXXXX=${encodeURIComponent(email)}`
-      // });
+      // Submit to Google Forms
+      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/formResponse';
+      fetch(formUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'entry.948937121=' + encodeURIComponent(name) + '&entry.2071234590=' + encodeURIComponent(email)
+      });
 
       document.getElementById('emailGate').classList.add('hidden');
       showToast('Welcome, ' + name.split(' ')[0] + '! Your checklist is ready.');
@@ -1036,14 +1035,14 @@
       votes.push({ price: selected.value, date: new Date().toISOString() });
       localStorage.setItem('rh_price_votes', JSON.stringify(votes));
 
-      // Uncomment to send to Google Forms:
-      // const formUrl = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
-      // fetch(formUrl, {
-      //   method: 'POST',
-      //   mode: 'no-cors',
-      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      //   body: `entry.XXXXX=${encodeURIComponent(selected.value)}`
-      // });
+      // Submit to Google Forms pricing survey
+      const pricingFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScxcXRdIFi25U7bPqzmUE8YrDVquxXBLqJNVVBRYV5KlOlHGA/formResponse';
+      fetch(pricingFormUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'entry.429810746=' + encodeURIComponent(selected.value)
+      });
 
       document.getElementById('pollSubmit').style.display = 'none';
       document.getElementById('priceOptions').style.display = 'none';
