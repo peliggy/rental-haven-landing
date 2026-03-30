@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- 100% privacy-first analytics -->
   <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <script async src="https://scripts.simpleanalyticscdn.com/auto-events.js"></script>
   <style>
     @page { size: A4; margin: 1.5cm; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1039,6 +1040,41 @@
         body: body
       });
     }
+
+    function trackClick(eventName, metadata) {
+      if (typeof window.sa_event !== 'function') return;
+      window.sa_event(eventName, metadata);
+    }
+
+    function getTrackingLabel(el) {
+      const label = (el.getAttribute('aria-label') || el.textContent || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      return label.slice(0, 80) || 'unknown';
+    }
+
+    document.addEventListener('click', function(e) {
+      const option = e.target.closest('.price-option');
+      if (option) {
+        trackClick('button_click', {
+          page: 'checklist',
+          label: getTrackingLabel(option),
+          id: option.id || '',
+          type: 'price-option'
+        });
+        return;
+      }
+
+      const clickable = e.target.closest('button, a.btn');
+      if (!clickable) return;
+      trackClick('button_click', {
+        page: 'checklist',
+        label: getTrackingLabel(clickable),
+        id: clickable.id || '',
+        href: clickable.getAttribute('href') || '',
+        tag: clickable.tagName.toLowerCase()
+      });
+    });
 
     function hydrateGateFromPrelead() {
       const preLead = JSON.parse(localStorage.getItem(INDEX_PRELEAD_KEY) || 'null');
