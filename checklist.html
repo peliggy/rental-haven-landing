@@ -510,6 +510,44 @@
       margin-bottom: 1.5rem;
     }
 
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .cta-actions .btn-link {
+      display: inline-block;
+      width: 100%;
+      max-width: 320px;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: transform 0.1s, background 0.2s, border-color 0.2s;
+    }
+
+    .cta-actions .btn-link:active { transform: scale(0.98); }
+
+    .cta-actions .btn-primary-link {
+      background: var(--green);
+      color: var(--white);
+      border: 2px solid var(--green);
+    }
+
+    .cta-actions .btn-primary-link:hover { background: var(--green-dark); border-color: var(--green-dark); }
+
+    .cta-actions .btn-secondary-link {
+      background: var(--white);
+      color: var(--green);
+      border: 2px solid var(--green);
+    }
+
+    .cta-actions .btn-secondary-link:hover { background: var(--green-light); }
+
     .cta-feature {
       display: flex;
       align-items: center;
@@ -689,6 +727,7 @@
       .toolbar { padding: 0.75rem 1.25rem; }
       .progress-section { padding: 0.75rem 1.25rem; }
       .cta-features { grid-template-columns: 1fr; }
+      .cta-actions .btn-link { max-width: none; }
       .section-header { gap: 0.5rem; }
       .section-header h2 { font-size: 0.95rem; }
       .email-gate { align-items: flex-start; padding: 0.85rem; }
@@ -961,14 +1000,19 @@
       <!-- CTA + Pricing Poll -->
       <div class="cta-section">
         <div class="brand-mark">Introducing Rental Haven</div>
-        <h2>Stop tracking compliance in spreadsheets</h2>
-        <p class="cta-subtitle">Rental Haven centralises your documents, automates reminders, and gives you full visibility across every property.</p>
+        <h2>Know what to send. Keep proof.</h2>
+        <p class="cta-subtitle">Rental Haven is being designed to tell you what applies to a tenancy, help you serve the right documents correctly, and keep a dispute-ready proof pack.</p>
 
         <div class="cta-features">
-          <div class="cta-feature"><span class="dot"></span> Compliance automation</div>
-          <div class="cta-feature"><span class="dot"></span> Rent increase management</div>
-          <div class="cta-feature"><span class="dot"></span> Evidence &amp; document tracking</div>
-          <div class="cta-feature"><span class="dot"></span> Deadline &amp; renewal alerts</div>
+          <div class="cta-feature"><span class="dot"></span> Tenancy-specific decision flow</div>
+          <div class="cta-feature"><span class="dot"></span> Correct document service steps</div>
+          <div class="cta-feature"><span class="dot"></span> Timestamps and evidence log</div>
+          <div class="cta-feature"><span class="dot"></span> Downloadable proof pack</div>
+        </div>
+
+        <div class="cta-actions">
+          <a href="proof-workflow.html" class="btn-link btn-primary-link">See The Proof Workflow</a>
+          <a href="index.html" class="btn-link btn-secondary-link">Back To Landing Page</a>
         </div>
 
         <!-- Follow-up poll -->
@@ -1065,7 +1109,7 @@
         return;
       }
 
-      const clickable = e.target.closest('button, a.btn');
+      const clickable = e.target.closest('button, a.btn, a.btn-link');
       if (!clickable) return;
       trackClick('button_click', {
         page: 'checklist',
