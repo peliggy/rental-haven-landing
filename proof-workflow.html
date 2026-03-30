@@ -294,10 +294,20 @@
       return label.slice(0, 80) || 'unknown';
     }
 
+    function getTrackingEventName(el) {
+      const label = getTrackingLabel(el)
+        .toLowerCase()
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .slice(0, 64);
+      return label || 'unknown_click';
+    }
+
     document.addEventListener('click', function(e) {
       const clickable = e.target.closest('button, a.btn');
       if (!clickable) return;
-      trackClick('button_click', {
+      trackClick(getTrackingEventName(clickable), {
         page: 'proof-workflow',
         label: getTrackingLabel(clickable),
         id: clickable.id || '',
