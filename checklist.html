@@ -55,6 +55,7 @@
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
+      overflow-y: auto;
     }
 
     .email-gate.hidden { display: none; }
@@ -62,11 +63,12 @@
     .gate-card {
       background: var(--white);
       border-radius: 16px;
-      padding: 2.5rem 2rem;
+      padding: 2rem 1.75rem 1.5rem;
       max-width: 420px;
       width: 100%;
       text-align: center;
       box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+      margin: auto 0;
     }
 
     .gate-card .logo-mark {
@@ -92,14 +94,36 @@
     }
 
     .gate-card .gate-sub {
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       color: var(--muted);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.1rem;
     }
 
     .gate-form { display: flex; flex-direction: column; gap: 0.75rem; }
 
-    .gate-form input {
+    .gate-fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .gate-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .gate-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: -0.15rem;
+    }
+
+    .gate-form input,
+    .gate-form select {
       width: 100%;
       padding: 0.85rem 1rem;
       border: 2px solid var(--border);
@@ -110,7 +134,20 @@
       transition: border-color 0.2s;
     }
 
-    .gate-form input:focus { border-color: var(--green); }
+    .gate-form input:focus,
+    .gate-form select:focus { border-color: var(--green); }
+
+    .gate-form select {
+      background: var(--white);
+      color: var(--body);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .gate-form input[readonly] {
+      background: var(--light);
+      color: var(--muted);
+    }
 
     .gate-form button {
       width: 100%;
@@ -539,6 +576,12 @@
       flex: 1;
     }
 
+    .price-option .tier-name {
+      font-weight: 700;
+      color: var(--dark);
+      margin-right: 0.35rem;
+    }
+
     .price-option .price-tag {
       font-size: 0.85rem;
       font-weight: 700;
@@ -645,7 +688,22 @@
       .cta-features { grid-template-columns: 1fr; }
       .section-header { gap: 0.5rem; }
       .section-header h2 { font-size: 0.95rem; }
-      .gate-card { padding: 2rem 1.5rem; }
+      .email-gate { align-items: flex-start; padding: 0.85rem; }
+      .gate-card { padding: 1.2rem 0.9rem 1rem; border-radius: 14px; margin: 0; }
+      .gate-card .logo-mark { width: 42px; height: 42px; margin-bottom: 0.9rem; }
+      .gate-card h2 { font-size: 1.08rem; margin-bottom: 0.25rem; line-height: 1.15; }
+      .gate-card .gate-sub { font-size: 0.76rem; margin-bottom: 0.65rem; }
+      .gate-form { gap: 0.5rem; }
+      .gate-form input, .gate-form select { padding: 0.7rem 0.8rem; font-size: 0.88rem; }
+      .gate-label { font-size: 0.78rem; }
+      .price-options { gap: 0.32rem; }
+      #gatePriceOptions .price-option { padding: 0.48rem 0.58rem; gap: 0.45rem; }
+      #gatePriceOptions .price-option input[type="radio"] { width: 15px; height: 15px; }
+      #gatePriceOptions .price-option label { font-size: 0.76rem; line-height: 1.15; }
+      #gatePriceOptions .price-option .price-tag { font-size: 0.76rem; }
+      #gatePriceOptions .tier-name { display: block; margin-right: 0; margin-bottom: 0.08rem; }
+      .gate-note, .gate-trust { font-size: 0.72rem; }
+      .gate-form button { padding: 0.78rem; font-size: 0.9rem; }
     }
 
     @media (min-width: 601px) {
@@ -659,15 +717,45 @@
   <div class="email-gate" id="emailGate">
     <div class="gate-card">
       <div class="logo-mark">R</div>
-      <h2>Get Your Free Landlord<br>Compliance Checklist</h2>
-      <p class="gate-sub">22 items every UK landlord must check before the Renters' Rights Act takes effect in May 2026.</p>
+      <h2>Free Landlord<br>Checklist</h2>
+      <p class="gate-sub" id="gateSub">Name, email, one price.</p>
       <form class="gate-form" id="gateForm">
         <input type="text" name="name" placeholder="Your name" required autocomplete="given-name">
         <input type="email" name="email" placeholder="Your email" required autocomplete="email">
-        <p class="gate-error" id="gateError">Please enter your name and email.</p>
-        <button type="submit">Unlock Checklist (Free)</button>
+        <fieldset class="gate-fieldset">
+          <label class="gate-label">Pick a plan</label>
+          <div class="price-options" id="gatePriceOptions">
+            <div class="price-option" onclick="selectGatePrice(this)">
+              <input type="radio" name="gate_price" value="basic-9">
+              <label><span class="tier-name">Basic</span>Essential reminders and tracking</label>
+              <span class="price-tag">&pound;9</span>
+            </div>
+            <div class="price-option" onclick="selectGatePrice(this)">
+              <input type="radio" name="gate_price" value="gold-19">
+              <label><span class="tier-name">Gold</span>Peace of mind for most landlords</label>
+              <span class="price-tag">&pound;19</span>
+            </div>
+            <div class="price-option" onclick="selectGatePrice(this)">
+              <input type="radio" name="gate_price" value="premium-29">
+              <label><span class="tier-name">Premium</span>Full compliance support</label>
+              <span class="price-tag">&pound;29+</span>
+            </div>
+          </div>
+          <p class="gate-note">Research only.</p>
+        </fieldset>
+        <label class="gate-label" for="portfolioSize">Portfolio <span style="font-weight: 500; color: var(--muted);">(optional)</span></label>
+        <select id="portfolioSize" name="portfolio_size" autocomplete="off">
+          <option value="">Optional</option>
+          <option value="1">1 property</option>
+          <option value="2-3">2-3 properties</option>
+          <option value="4-10">4-10 properties</option>
+          <option value="11+">11+ properties</option>
+          <option value="agent">Agent / manager</option>
+        </select>
+        <p class="gate-error" id="gateError">Please enter your name, email, and choose a price range.</p>
+        <button type="submit">Unlock Checklist</button>
       </form>
-      <p class="gate-trust">No spam. No payment. Unsubscribe anytime.</p>
+      <p class="gate-trust">Free. No payment.</p>
     </div>
   </div>
 
@@ -880,39 +968,39 @@
           <div class="cta-feature"><span class="dot"></span> Deadline &amp; renewal alerts</div>
         </div>
 
-        <!-- Pricing poll -->
+        <!-- Follow-up poll -->
         <div class="pricing-poll" id="pricingPoll">
-          <h3>Help us set the right price</h3>
-          <p class="poll-sub">What would you pay monthly for a tool that handles all of this automatically?</p>
+          <h3>One more thing before you go</h3>
+          <p class="poll-sub">Which part of landlord compliance feels most stressful right now?</p>
           <div class="price-options" id="priceOptions">
-            <div class="price-option" onclick="selectPrice(this)">
-              <input type="radio" name="price" value="free">
-              <label>I'd only use it if it's free</label>
-              <span class="price-tag">&pound;0</span>
+            <div class="price-option" onclick="selectPainPoint(this)">
+              <input type="radio" name="pain_point" value="rent-increases">
+              <label>Rent increases and changing rules</label>
+              <span class="price-tag">Rules</span>
             </div>
-            <div class="price-option" onclick="selectPrice(this)">
-              <input type="radio" name="price" value="5-9">
-              <label>A small monthly fee feels fair</label>
-              <span class="price-tag">&pound;5&ndash;9</span>
+            <div class="price-option" onclick="selectPainPoint(this)">
+              <input type="radio" name="pain_point" value="paperwork">
+              <label>Keeping documents and evidence organised</label>
+              <span class="price-tag">Admin</span>
             </div>
-            <div class="price-option" onclick="selectPrice(this)">
-              <input type="radio" name="price" value="10-19">
-              <label>I'd pay for real compliance peace of mind</label>
-              <span class="price-tag">&pound;10&ndash;19</span>
+            <div class="price-option" onclick="selectPainPoint(this)">
+              <input type="radio" name="pain_point" value="repairs">
+              <label>Repairs, hazards, and response times</label>
+              <span class="price-tag">Repairs</span>
             </div>
-            <div class="price-option" onclick="selectPrice(this)">
-              <input type="radio" name="price" value="20-29">
-              <label>Worth it if it saves me from penalties</label>
-              <span class="price-tag">&pound;20&ndash;29</span>
+            <div class="price-option" onclick="selectPainPoint(this)">
+              <input type="radio" name="pain_point" value="penalties">
+              <label>Fear of fines, councils, or tribunal issues</label>
+              <span class="price-tag">Risk</span>
             </div>
-            <div class="price-option" onclick="selectPrice(this)">
-              <input type="radio" name="price" value="30+">
-              <label>I'd pay premium for a full solution</label>
-              <span class="price-tag">&pound;30+</span>
+            <div class="price-option" onclick="selectPainPoint(this)">
+              <input type="radio" name="pain_point" value="time">
+              <label>Finding time to keep on top of everything</label>
+              <span class="price-tag">Time</span>
             </div>
           </div>
-          <button class="poll-submit" id="pollSubmit" onclick="submitPricing()">Submit My Vote</button>
-          <div class="poll-thanks" id="pollThanks">Thank you! Your feedback shapes what we build.</div>
+          <button class="poll-submit" id="pollSubmit" onclick="submitPainPoint()">Send Answer</button>
+          <div class="poll-thanks" id="pollThanks">Thank you. That helps us decide what to build first.</div>
         </div>
       </div>
 
@@ -930,43 +1018,83 @@
   <script>
     // ── State ──
     const STORAGE_KEY = 'rh_checklist';
+    const LEAD_STORAGE_KEY = 'rh_research_lead';
+    const INDEX_PRELEAD_KEY = 'rh_index_prelead';
+    const LEAD_HISTORY_KEY = 'rh_leads';
+    const PAIN_POINT_KEY = 'rh_pain_point';
+    const RESEARCH_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/formResponse';
     const TOTAL_ITEMS = document.querySelectorAll('.checklist-item input[type="checkbox"]').length;
+
+    function createLeadId() {
+      return 'RH-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    }
+
+    function postToGoogleForm(url, body) {
+      return fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      });
+    }
+
+    function hydrateGateFromPrelead() {
+      const preLead = JSON.parse(localStorage.getItem(INDEX_PRELEAD_KEY) || 'null');
+      if (!preLead || localStorage.getItem(LEAD_STORAGE_KEY)) return;
+
+      const form = document.getElementById('gateForm');
+      form.name.value = preLead.name || '';
+      form.email.value = preLead.email || '';
+      form.name.readOnly = true;
+      form.email.readOnly = true;
+      document.getElementById('gateSub').textContent = 'Saved. Pick a plan.';
+    }
 
     // ── Email gate ──
     document.getElementById('gateForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const name = this.name.value.trim();
       const email = this.email.value.trim();
+      const price = this.querySelector('input[name="gate_price"]:checked');
+      const portfolioSize = this.portfolio_size.value;
+      const preLead = JSON.parse(localStorage.getItem(INDEX_PRELEAD_KEY) || 'null');
 
-      if (!name || !email) {
+      if (!name || !email || !price) {
         document.getElementById('gateError').style.display = 'block';
         return;
       }
 
-      // Store lead locally
-      const leads = JSON.parse(localStorage.getItem('rh_leads') || '[]');
-      leads.push({ name, email, date: new Date().toISOString() });
-      localStorage.setItem('rh_leads', JSON.stringify(leads));
+      document.getElementById('gateError').style.display = 'none';
 
-      // Submit to Google Forms
-      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd-EXripQlVQJq0zqEozDUrAtibJ3lsF2WhjuObN562L0JaUA/formResponse';
-      fetch(formUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'entry.948937121=' + encodeURIComponent(name) + '&entry.2071234590=' + encodeURIComponent(email)
-      });
+      const lead = {
+        id: preLead && preLead.id ? preLead.id : createLeadId(),
+        name: name,
+        email: email,
+        price: price.value,
+        portfolioSize: portfolioSize || '',
+        date: new Date().toISOString()
+      };
 
+      const leads = JSON.parse(localStorage.getItem(LEAD_HISTORY_KEY) || '[]');
+      leads.push(lead);
+      localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(lead));
+      localStorage.setItem(LEAD_HISTORY_KEY, JSON.stringify(leads));
+
+      postToGoogleForm(
+        RESEARCH_FORM_URL,
+        'entry.948937121=' + encodeURIComponent(name) +
+        '&entry.2071234590=' + encodeURIComponent(email) +
+        '&entry.1418166133=' + encodeURIComponent(lead.price)
+      );
+
+      localStorage.removeItem(INDEX_PRELEAD_KEY);
       document.getElementById('emailGate').classList.add('hidden');
-      showToast('Welcome, ' + name.split(' ')[0] + '! Your checklist is ready.');
+      showToast('Welcome, ' + name.split(' ')[0] + '. Your checklist is ready.');
     });
 
     // Skip gate if already submitted
-    if (localStorage.getItem('rh_leads')) {
-      const leads = JSON.parse(localStorage.getItem('rh_leads'));
-      if (leads.length > 0) {
-        document.getElementById('emailGate').classList.add('hidden');
-      }
+    if (localStorage.getItem(LEAD_STORAGE_KEY)) {
+      document.getElementById('emailGate').classList.add('hidden');
     }
 
     // ── Checkbox logic ──
@@ -1039,35 +1167,35 @@
       window.print();
     }
 
-    // ── Pricing poll ──
-    function selectPrice(el) {
-      document.querySelectorAll('.price-option').forEach(function(opt) {
+    // ── Gate price selection ──
+    function selectGatePrice(el) {
+      document.querySelectorAll('#gatePriceOptions .price-option').forEach(function(opt) {
         opt.classList.remove('selected');
       });
       el.classList.add('selected');
       el.querySelector('input[type="radio"]').checked = true;
     }
 
-    function submitPricing() {
-      const selected = document.querySelector('input[name="price"]:checked');
+    // ── Follow-up poll ──
+    function selectPainPoint(el) {
+      document.querySelectorAll('#priceOptions .price-option').forEach(function(opt) {
+        opt.classList.remove('selected');
+      });
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function submitPainPoint() {
+      const selected = document.querySelector('input[name="pain_point"]:checked');
       if (!selected) {
-        showToast('Please select a pricing option.');
+        showToast('Please select one answer.');
         return;
       }
 
-      // Store locally
-      const votes = JSON.parse(localStorage.getItem('rh_price_votes') || '[]');
-      votes.push({ price: selected.value, date: new Date().toISOString() });
-      localStorage.setItem('rh_price_votes', JSON.stringify(votes));
-
-      // Submit to Google Forms pricing survey
-      const pricingFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScxcXRdIFi25U7bPqzmUE8YrDVquxXBLqJNVVBRYV5KlOlHGA/formResponse';
-      fetch(pricingFormUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'entry.429810746=' + encodeURIComponent(selected.value)
-      });
+      localStorage.setItem(PAIN_POINT_KEY, JSON.stringify({
+        value: selected.value,
+        date: new Date().toISOString()
+      }));
 
       document.getElementById('pollSubmit').style.display = 'none';
       document.getElementById('priceOptions').style.display = 'none';
@@ -1084,7 +1212,13 @@
     }
 
     // ── Init ──
+    hydrateGateFromPrelead();
     initChecklistInputs();
+    if (localStorage.getItem(PAIN_POINT_KEY)) {
+      document.getElementById('pollSubmit').style.display = 'none';
+      document.getElementById('priceOptions').style.display = 'none';
+      document.getElementById('pollThanks').style.display = 'block';
+    }
     loadProgress();
     updateProgress();
   </script>
