@@ -166,12 +166,17 @@
       font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      color: inherit;
       opacity: 0.8;
       margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      text-decoration: none;
+      width: fit-content;
     }
+
+    .cover-brand:hover { opacity: 1; }
 
     .cover-brand .logo-icon {
       width: 26px;
@@ -670,10 +675,10 @@
 
     <!-- Cover -->
     <header class="cover">
-      <div class="cover-brand">
+      <a href="index.html" class="cover-brand">
         <span class="logo-icon">R</span>
         Rental Haven
-      </div>
+      </a>
       <h1>UK Landlord Compliance<br>Checklist 2026</h1>
       <p class="subtitle">Everything you need to stay compliant under the Renters' Rights Act and avoid penalties of up to &pound;7,000 per tenancy.</p>
       <div class="cover-meta">
