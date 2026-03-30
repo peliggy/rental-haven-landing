@@ -718,12 +718,12 @@
     <div class="gate-card">
       <div class="logo-mark">R</div>
       <h2>Free Landlord<br>Checklist</h2>
-      <p class="gate-sub" id="gateSub">Name, email, one price.</p>
+      <p class="gate-sub" id="gateSub">Name, email, optional price.</p>
       <form class="gate-form" id="gateForm">
         <input type="text" name="name" placeholder="Your name" required autocomplete="given-name">
         <input type="email" name="email" placeholder="Your email" required autocomplete="email">
         <fieldset class="gate-fieldset">
-          <label class="gate-label">Pick a plan</label>
+          <label class="gate-label">Optional: what would you pay?</label>
           <div class="price-options" id="gatePriceOptions">
             <div class="price-option" onclick="selectGatePrice(this)">
               <input type="radio" name="gate_price" value="basic-9">
@@ -741,7 +741,7 @@
               <span class="price-tag">&pound;29+</span>
             </div>
           </div>
-          <p class="gate-note">Research only.</p>
+          <p class="gate-note">Optional.</p>
         </fieldset>
         <label class="gate-label" for="portfolioSize">Portfolio <span style="font-weight: 500; color: var(--muted);">(optional)</span></label>
         <select id="portfolioSize" name="portfolio_size" autocomplete="off">
@@ -752,7 +752,7 @@
           <option value="11+">11+ properties</option>
           <option value="agent">Agent / manager</option>
         </select>
-        <p class="gate-error" id="gateError">Please enter your name, email, and choose a price range.</p>
+        <p class="gate-error" id="gateError">Please enter your name and email.</p>
         <button type="submit">Unlock Checklist</button>
       </form>
       <p class="gate-trust">Free. No payment.</p>
@@ -1047,7 +1047,7 @@
       form.email.value = preLead.email || '';
       form.name.readOnly = true;
       form.email.readOnly = true;
-      document.getElementById('gateSub').textContent = 'Saved. Pick a plan.';
+      document.getElementById('gateSub').textContent = 'Saved. Price optional.';
     }
 
     // ── Email gate ──
@@ -1059,7 +1059,7 @@
       const portfolioSize = this.portfolio_size.value;
       const preLead = JSON.parse(localStorage.getItem(INDEX_PRELEAD_KEY) || 'null');
 
-      if (!name || !email || !price) {
+      if (!name || !email) {
         document.getElementById('gateError').style.display = 'block';
         return;
       }
@@ -1070,7 +1070,7 @@
         id: preLead && preLead.id ? preLead.id : createLeadId(),
         name: name,
         email: email,
-        price: price.value,
+        price: price ? price.value : 'no-answer',
         portfolioSize: portfolioSize || '',
         date: new Date().toISOString()
       };
