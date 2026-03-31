@@ -185,8 +185,24 @@
     .hero p.subtitle {
       font-size: 1rem;
       color: var(--muted);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       max-width: 520px;
+    }
+
+    .hero-fast-points {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-fast-point {
+      background: var(--green-light);
+      border-radius: 10px;
+      padding: 0.8rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--dark);
     }
 
     /* ── Pain points ── */
@@ -220,7 +236,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .btn {
@@ -259,6 +275,13 @@
       font-size: 0.85rem;
       color: var(--muted);
       margin-bottom: 0.25rem;
+    }
+
+    .cta-microcopy {
+      font-size: 0.82rem;
+      color: var(--green-dark);
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
 
     .audience-line {
@@ -530,7 +553,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       font-size: 0.85rem;
       color: var(--muted);
     }
@@ -571,24 +594,24 @@
     <div class="interest-card">
       <button class="interest-close" id="interestClose" type="button" aria-label="Close popup">&times;</button>
       <div class="interest-logo">R</div>
-      <h3>Before you go</h3>
-      <p>Get the free checklist now. Leave your name and email, and we’ll take you straight to the final pricing question.</p>
+      <h3>Get the free checklist</h3>
+      <p>Name and email first. Then you go straight to the checklist.</p>
       <form class="interest-form" id="interestForm">
         <input type="text" name="name" placeholder="Your name" required autocomplete="given-name">
         <input type="email" name="email" placeholder="Your email" required autocomplete="email">
         <p class="interest-error" id="interestError">Please enter your name and email.</p>
         <button type="submit">Continue to Checklist</button>
       </form>
-      <p class="interest-note">No payment required. One quick pricing question comes next.</p>
+      <p class="interest-note">Free. No payment.</p>
     </div>
   </div>
 
   <!-- Hero -->
   <section class="hero">
     <div class="hero-inner">
-      <h1>Avoid &pound;7,000 compliance mistakes</h1>
+      <h1>Big landlord changes are coming. Get the free checklist.</h1>
       <p class="subtitle">
-        Stop guessing what applies, who to send it to, and how to prove you did it. Get the free checklist and help shape a tool built for UK landlords.
+        See what to sort next, what to send, and what proof to keep before the new rules bite.
       </p>
 
       <div class="spots-bar">
@@ -596,17 +619,24 @@
         <div class="progress-track"><div class="progress-fill"></div></div>
       </div>
 
-      <p class="pain-header">Sound familiar?</p>
+      <div class="hero-fast-points">
+        <div class="hero-fast-point">Free checklist in about 60 seconds</div>
+        <div class="hero-fast-point">Built for UK landlords and small portfolios</div>
+        <div class="hero-fast-point">Includes one quick pricing question for research</div>
+      </div>
+
+      <div class="cta-group">
+        <a href="checklist.html" class="btn btn-primary" id="main-cta">Get Free Checklist</a>
+      </div>
+
+      <p class="cta-microcopy">Free. Takes about 60 seconds. No payment.</p>
+
+      <p class="pain-header">If you are thinking:</p>
       <ul class="pain-list">
         <li><span class="check">&#10003;</span> Not sure exactly what applies to this tenancy?</li>
         <li><span class="check">&#10003;</span> Unsure who needs the document and how to send it?</li>
         <li><span class="check">&#10003;</span> Worried a tenant could later deny receiving it?</li>
-        <li><span class="check">&#10003;</span> Fed up with guessing from Facebook comments and agents?</li>
       </ul>
-
-      <div class="cta-group">
-        <a href="checklist.html" class="btn btn-primary" id="main-cta">Get Free Compliance Checklist (60 sec)</a>
-      </div>
 
       <div class="social-proof">
         <div class="avatar-stack">
@@ -623,7 +653,7 @@
   <!-- Why this matters -->
   <section class="section">
     <div class="section-inner">
-      <h2>The Renters' Rights Act changes everything</h2>
+      <h2>Why landlords are clicking now</h2>
       <div class="stats">
         <div class="stat-card">
           <div class="number">&pound;7,000</div>
@@ -639,7 +669,7 @@
         </div>
       </div>
       <p style="color: var(--muted); font-size: 0.95rem;">
-        The hard part is not finding a PDF. It is knowing what applies, serving it correctly, and keeping proof if it is ever challenged.
+        The hard part is not finding a form. It is knowing what applies, sending the right thing, and keeping proof.
       </p>
       <div class="section-cta">
         <a href="checklist.html" class="btn btn-primary">Get Free Checklist</a>
@@ -723,9 +753,9 @@
 
   <!-- Final CTA -->
   <section class="final-cta" id="reserve">
-    <h2>Know what applies. Send it right. Keep proof.</h2>
-    <p>Join the landlords helping shape a faster way to stay compliant without relying on agents or Facebook advice.</p>
-    <a href="checklist.html" class="btn btn-primary">Get Free Compliance Checklist (60 sec)</a>
+    <h2>Know what to sort next. Send it right. Keep proof.</h2>
+    <p>Get the free checklist and help shape a faster tool for landlords who do not want to guess.</p>
+    <a href="checklist.html" class="btn btn-primary">Get Free Checklist</a>
     <p style="color:#aaa; font-size:0.85rem; margin-top:1rem;">No payment required. No spam. Unsubscribe anytime.</p>
   </section>
 
@@ -741,9 +771,9 @@
     const LEAD_STORAGE_KEY = 'rh_research_lead';
     const INDEX_PRELEAD_KEY = 'rh_index_prelead';
     const POPUP_DISMISSED_KEY = 'rh_index_popup_closed';
-    const EARLY_TRIGGER_MS = 8000;
-    const TIME_TRIGGER_MS = 18000;
-    const SCROLL_TRIGGER_RATIO = 0.35;
+    const EARLY_TRIGGER_MS = 5000;
+    const TIME_TRIGGER_MS = 12000;
+    const SCROLL_TRIGGER_RATIO = 0.18;
 
     let popupShown = false;
     let earlyTriggerReached = false;
