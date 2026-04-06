@@ -108,6 +108,48 @@
       gap: 0.75rem;
     }
 
+    .interest-fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .interest-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .interest-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    .interest-option {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--dark);
+      padding: 0.7rem 0.65rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.2;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .interest-option:hover,
+    .interest-option.selected {
+      border-color: var(--green);
+      background: var(--green-light);
+      color: var(--green-dark);
+    }
+
     .interest-form input {
       width: 100%;
       padding: 0.85rem 1rem;
@@ -121,7 +163,7 @@
 
     .interest-form input:focus { border-color: var(--green); }
 
-    .interest-form button {
+    .interest-form .interest-submit {
       width: 100%;
       padding: 0.9rem;
       background: var(--green);
@@ -134,7 +176,7 @@
       cursor: pointer;
     }
 
-    .interest-form button:hover { background: var(--green-dark); }
+    .interest-form .interest-submit:hover { background: var(--green-dark); }
 
     .interest-error {
       display: none;
@@ -595,14 +637,39 @@
       <button class="interest-close" id="interestClose" type="button" aria-label="Close popup">&times;</button>
       <div class="interest-logo">R</div>
       <h3>Get the free checklist</h3>
-      <p>Name and email first. Then you go straight to the checklist.</p>
+      <p>Answer 3 quick questions so we can tailor the research and take you straight in.</p>
       <form class="interest-form" id="interestForm">
-        <input type="text" name="name" placeholder="Your name" required autocomplete="given-name">
         <input type="email" name="email" placeholder="Your email" required autocomplete="email">
-        <p class="interest-error" id="interestError">Please enter your name and email.</p>
-        <button type="submit">Continue to Checklist</button>
+        <fieldset class="interest-fieldset">
+          <label class="interest-label">How many properties?</label>
+          <div class="interest-options" id="indexPortfolioOptions">
+            <button type="button" class="interest-option" data-field="portfolio_size" data-value="1">1</button>
+            <button type="button" class="interest-option" data-field="portfolio_size" data-value="2-3">2-3</button>
+            <button type="button" class="interest-option" data-field="portfolio_size" data-value="4-10">4-10</button>
+            <button type="button" class="interest-option" data-field="portfolio_size" data-value="11+">11+</button>
+          </div>
+        </fieldset>
+        <fieldset class="interest-fieldset">
+          <label class="interest-label">Biggest worry right now?</label>
+          <div class="interest-options" id="indexConcernOptions">
+            <button type="button" class="interest-option" data-field="main_concern" data-value="missing-steps">Missing steps</button>
+            <button type="button" class="interest-option" data-field="main_concern" data-value="what-to-send">What to send</button>
+            <button type="button" class="interest-option" data-field="main_concern" data-value="keeping-proof">Keeping proof</button>
+            <button type="button" class="interest-option" data-field="main_concern" data-value="repairs-rent">Repairs / rent</button>
+          </div>
+        </fieldset>
+        <fieldset class="interest-fieldset">
+          <label class="interest-label">How do you manage?</label>
+          <div class="interest-options" id="indexManageOptions">
+            <button type="button" class="interest-option" data-field="manage_style" data-value="self-manage">Self-manage</button>
+            <button type="button" class="interest-option" data-field="manage_style" data-value="agent">Use agent</button>
+            <button type="button" class="interest-option" data-field="manage_style" data-value="mixed">Mixed</button>
+          </div>
+        </fieldset>
+        <p class="interest-error" id="interestError">Enter your email and tap the 3 quick answers.</p>
+        <button type="submit" class="interest-submit">Continue to Checklist</button>
       </form>
-      <p class="interest-note">Free. No payment.</p>
+      <p class="interest-note">Free. No payment. Takes under a minute.</p>
     </div>
   </div>
 
@@ -784,6 +851,21 @@
       return 'RH-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
     }
 
+    function getDeviceType() {
+      if (window.innerWidth <= 768 || navigator.maxTouchPoints > 0) return 'mobile';
+      return 'desktop';
+    }
+
+    function getReferrerSource() {
+      const referrer = document.referrer || '';
+      if (!referrer) return 'direct';
+      try {
+        return new URL(referrer).hostname.replace(/^www\./, '');
+      } catch (err) {
+        return referrer;
+      }
+    }
+
     function trackClick(eventName, metadata) {
       if (typeof window.sa_event !== 'function') return;
       window.sa_event(eventName, metadata);
@@ -825,12 +907,21 @@
         !sessionStorage.getItem(POPUP_DISMISSED_KEY);
     }
 
-    function openInterestPopup() {
-      if (!shouldShowPopup()) return;
+    function openInterestPopup(forceOpen) {
+      if (!forceOpen && !shouldShowPopup()) return;
+      if (localStorage.getItem(LEAD_STORAGE_KEY)) {
+        window.location.href = 'checklist.html';
+        return;
+      }
       popupShown = true;
       const popup = document.getElementById('interestPopup');
       popup.classList.add('show');
       popup.setAttribute('aria-hidden', 'false');
+      trackClick('lead_quiz_opened', {
+        page: 'index',
+        source: getReferrerSource(),
+        device: getDeviceType()
+      });
     }
 
     function closeInterestPopup() {
@@ -838,6 +929,9 @@
       popup.classList.remove('show');
       popup.setAttribute('aria-hidden', 'true');
       sessionStorage.setItem(POPUP_DISMISSED_KEY, '1');
+      trackClick('lead_quiz_closed', {
+        page: 'index'
+      });
     }
 
     function maybeShowPopup() {
@@ -871,12 +965,36 @@
       if (e.target === this) closeInterestPopup();
     });
 
+    function setInterestOption(groupId, button) {
+      document.querySelectorAll('#' + groupId + ' .interest-option').forEach(function(option) {
+        option.classList.remove('selected');
+      });
+      button.classList.add('selected');
+    }
+
+    document.querySelectorAll('.interest-option').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const groupId = this.parentElement.id;
+        setInterestOption(groupId, this);
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      const leadLink = e.target.closest('a[href="checklist.html"]');
+      if (!leadLink) return;
+      if (localStorage.getItem(LEAD_STORAGE_KEY) || localStorage.getItem(INDEX_PRELEAD_KEY)) return;
+      e.preventDefault();
+      openInterestPopup(true);
+    });
+
     document.getElementById('interestForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = this.name.value.trim();
       const email = this.email.value.trim();
+      const portfolioButton = document.querySelector('#indexPortfolioOptions .interest-option.selected');
+      const concernButton = document.querySelector('#indexConcernOptions .interest-option.selected');
+      const manageButton = document.querySelector('#indexManageOptions .interest-option.selected');
 
-      if (!name || !email) {
+      if (!email || !portfolioButton || !concernButton || !manageButton) {
         document.getElementById('interestError').style.display = 'block';
         return;
       }
@@ -884,13 +1002,26 @@
       document.getElementById('interestError').style.display = 'none';
       const lead = {
         id: createLeadId(),
-        name: name,
         email: email,
+        portfolioSize: portfolioButton.dataset.value,
+        mainConcern: concernButton.dataset.value,
+        manageStyle: manageButton.dataset.value,
         date: new Date().toISOString(),
-        source: 'index-popup'
+        source: 'index-popup',
+        referrer: getReferrerSource(),
+        device: getDeviceType(),
+        landingPage: 'index'
       };
 
       localStorage.setItem(INDEX_PRELEAD_KEY, JSON.stringify(lead));
+      trackClick('lead_quiz_completed', {
+        page: 'index',
+        portfolio_size: lead.portfolioSize,
+        main_concern: lead.mainConcern,
+        manage_style: lead.manageStyle,
+        referrer: lead.referrer,
+        device: lead.device
+      });
       window.location.href = 'checklist.html';
     });
   </script>

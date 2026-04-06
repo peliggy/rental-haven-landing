@@ -761,10 +761,66 @@
     <div class="gate-card">
       <div class="logo-mark">R</div>
       <h2>Free Landlord<br>Checklist</h2>
-      <p class="gate-sub" id="gateSub">Name, email, optional price.</p>
+      <p class="gate-sub" id="gateSub">Name, email, and a few quick answers.</p>
       <form class="gate-form" id="gateForm">
         <input type="text" name="name" placeholder="Your name" required autocomplete="given-name">
         <input type="email" name="email" placeholder="Your email" required autocomplete="email">
+        <div id="portfolioFieldWrap">
+          <label class="gate-label" for="portfolioSize">Portfolio size</label>
+          <select id="portfolioSize" name="portfolio_size" autocomplete="off">
+            <option value="">Select one</option>
+            <option value="1">1 property</option>
+            <option value="2-3">2-3 properties</option>
+            <option value="4-10">4-10 properties</option>
+            <option value="11+">11+ properties</option>
+            <option value="agent">Agent / manager</option>
+          </select>
+        </div>
+        <fieldset class="gate-fieldset" id="manageFieldset">
+          <label class="gate-label">How do you manage?</label>
+          <div class="price-options" id="gateManageOptions">
+            <div class="price-option" onclick="selectSingleOption('gateManageOptions', this)">
+              <input type="radio" name="manage_style" value="self-manage">
+              <label>Self-manage</label>
+              <span class="price-tag">DIY</span>
+            </div>
+            <div class="price-option" onclick="selectSingleOption('gateManageOptions', this)">
+              <input type="radio" name="manage_style" value="agent">
+              <label>Use agent</label>
+              <span class="price-tag">Agent</span>
+            </div>
+            <div class="price-option" onclick="selectSingleOption('gateManageOptions', this)">
+              <input type="radio" name="manage_style" value="mixed">
+              <label>Mixed</label>
+              <span class="price-tag">Both</span>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="gate-fieldset" id="concernFieldset">
+          <label class="gate-label">Biggest worry right now?</label>
+          <div class="price-options" id="gateConcernOptions">
+            <div class="price-option" onclick="selectSingleOption('gateConcernOptions', this)">
+              <input type="radio" name="main_concern" value="missing-steps">
+              <label>Missing steps</label>
+              <span class="price-tag">Steps</span>
+            </div>
+            <div class="price-option" onclick="selectSingleOption('gateConcernOptions', this)">
+              <input type="radio" name="main_concern" value="what-to-send">
+              <label>What to send</label>
+              <span class="price-tag">Docs</span>
+            </div>
+            <div class="price-option" onclick="selectSingleOption('gateConcernOptions', this)">
+              <input type="radio" name="main_concern" value="keeping-proof">
+              <label>Keeping proof</label>
+              <span class="price-tag">Proof</span>
+            </div>
+            <div class="price-option" onclick="selectSingleOption('gateConcernOptions', this)">
+              <input type="radio" name="main_concern" value="repairs-rent">
+              <label>Repairs / rent</label>
+              <span class="price-tag">Ops</span>
+            </div>
+          </div>
+        </fieldset>
         <fieldset class="gate-fieldset">
           <label class="gate-label">Optional: what would you pay?</label>
           <div class="price-options" id="gatePriceOptions">
@@ -786,16 +842,7 @@
           </div>
           <p class="gate-note">Optional.</p>
         </fieldset>
-        <label class="gate-label" for="portfolioSize">Portfolio <span style="font-weight: 500; color: var(--muted);">(optional)</span></label>
-        <select id="portfolioSize" name="portfolio_size" autocomplete="off">
-          <option value="">Optional</option>
-          <option value="1">1 property</option>
-          <option value="2-3">2-3 properties</option>
-          <option value="4-10">4-10 properties</option>
-          <option value="11+">11+ properties</option>
-          <option value="agent">Agent / manager</option>
-        </select>
-        <p class="gate-error" id="gateError">Please enter your name and email.</p>
+        <p class="gate-error" id="gateError">Please complete the required answers.</p>
         <button type="submit">Unlock Checklist</button>
       </form>
       <p class="gate-trust">Free. No payment.</p>
@@ -1019,32 +1066,27 @@
         <!-- Follow-up poll -->
         <div class="pricing-poll" id="pricingPoll">
           <h3>One more thing before you go</h3>
-          <p class="poll-sub">Which part of landlord compliance feels most stressful right now?</p>
+          <p class="poll-sub">What would make this worth paying for?</p>
           <div class="price-options" id="priceOptions">
             <div class="price-option" onclick="selectPainPoint(this)">
-              <input type="radio" name="pain_point" value="rent-increases">
-              <label>Rent increases and changing rules</label>
-              <span class="price-tag">Rules</span>
+              <input type="radio" name="pain_point" value="exact-steps">
+              <label>Tell me exactly what to do next</label>
+              <span class="price-tag">Clarity</span>
             </div>
             <div class="price-option" onclick="selectPainPoint(this)">
-              <input type="radio" name="pain_point" value="paperwork">
-              <label>Keeping documents and evidence organised</label>
-              <span class="price-tag">Admin</span>
+              <input type="radio" name="pain_point" value="proof-pack">
+              <label>Keep a proof pack ready</label>
+              <span class="price-tag">Proof</span>
             </div>
             <div class="price-option" onclick="selectPainPoint(this)">
-              <input type="radio" name="pain_point" value="repairs">
-              <label>Repairs, hazards, and response times</label>
-              <span class="price-tag">Repairs</span>
+              <input type="radio" name="pain_point" value="deadlines">
+              <label>Reminders and deadlines</label>
+              <span class="price-tag">Remind</span>
             </div>
             <div class="price-option" onclick="selectPainPoint(this)">
-              <input type="radio" name="pain_point" value="penalties">
-              <label>Fear of fines, councils, or tribunal issues</label>
-              <span class="price-tag">Risk</span>
-            </div>
-            <div class="price-option" onclick="selectPainPoint(this)">
-              <input type="radio" name="pain_point" value="time">
-              <label>Finding time to keep on top of everything</label>
-              <span class="price-tag">Time</span>
+              <input type="radio" name="pain_point" value="all-in-one">
+              <label>Everything in one place</label>
+              <span class="price-tag">All-in-one</span>
             </div>
           </div>
           <button class="poll-submit" id="pollSubmit" onclick="submitPainPoint()">Send Answer</button>
@@ -1075,6 +1117,21 @@
 
     function createLeadId() {
       return 'RH-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    }
+
+    function getDeviceType() {
+      if (window.innerWidth <= 768 || navigator.maxTouchPoints > 0) return 'mobile';
+      return 'desktop';
+    }
+
+    function getReferrerSource() {
+      const referrer = document.referrer || '';
+      if (!referrer) return 'direct';
+      try {
+        return new URL(referrer).hostname.replace(/^www\./, '');
+      } catch (err) {
+        return referrer;
+      }
     }
 
     function postToGoogleForm(url, body) {
@@ -1136,11 +1193,21 @@
       if (!preLead || localStorage.getItem(LEAD_STORAGE_KEY)) return;
 
       const form = document.getElementById('gateForm');
-      form.name.value = preLead.name || '';
       form.email.value = preLead.email || '';
-      form.name.readOnly = true;
       form.email.readOnly = true;
-      document.getElementById('gateSub').textContent = 'Saved. Price optional.';
+      if (preLead.portfolioSize) {
+        form.portfolio_size.value = preLead.portfolioSize;
+        document.getElementById('portfolioFieldWrap').style.display = 'none';
+      }
+      if (preLead.manageStyle) {
+        selectSavedOption('gateManageOptions', preLead.manageStyle);
+        document.getElementById('manageFieldset').style.display = 'none';
+      }
+      if (preLead.mainConcern) {
+        selectSavedOption('gateConcernOptions', preLead.mainConcern);
+        document.getElementById('concernFieldset').style.display = 'none';
+      }
+      document.getElementById('gateSub').textContent = 'Email saved. Add your name and finish.';
     }
 
     // ── Email gate ──
@@ -1150,9 +1217,14 @@
       const email = this.email.value.trim();
       const price = this.querySelector('input[name="gate_price"]:checked');
       const portfolioSize = this.portfolio_size.value;
+      const manageStyle = this.querySelector('input[name="manage_style"]:checked');
+      const mainConcern = this.querySelector('input[name="main_concern"]:checked');
       const preLead = JSON.parse(localStorage.getItem(INDEX_PRELEAD_KEY) || 'null');
+      const resolvedPortfolio = preLead && preLead.portfolioSize ? preLead.portfolioSize : portfolioSize;
+      const resolvedManageStyle = preLead && preLead.manageStyle ? preLead.manageStyle : (manageStyle ? manageStyle.value : '');
+      const resolvedMainConcern = preLead && preLead.mainConcern ? preLead.mainConcern : (mainConcern ? mainConcern.value : '');
 
-      if (!name || !email) {
+      if (!name || !email || !resolvedPortfolio || !resolvedManageStyle || !resolvedMainConcern) {
         document.getElementById('gateError').style.display = 'block';
         return;
       }
@@ -1164,9 +1236,16 @@
         name: name,
         email: email,
         price: price ? price.value : 'no-answer',
-        portfolioSize: portfolioSize || '',
+        portfolioSize: resolvedPortfolio,
+        manageStyle: resolvedManageStyle,
+        mainConcern: resolvedMainConcern,
         date: new Date().toISOString()
       };
+
+      lead.source = preLead && preLead.source ? preLead.source : 'checklist-gate';
+      lead.referrer = preLead && preLead.referrer ? preLead.referrer : getReferrerSource();
+      lead.device = preLead && preLead.device ? preLead.device : getDeviceType();
+      lead.landingPage = preLead && preLead.landingPage ? preLead.landingPage : 'checklist';
 
       const leads = JSON.parse(localStorage.getItem(LEAD_HISTORY_KEY) || '[]');
       leads.push(lead);
@@ -1179,6 +1258,17 @@
         '&entry.2071234590=' + encodeURIComponent(email) +
         '&entry.1418166133=' + encodeURIComponent(lead.price)
       );
+
+      trackClick('lead_capture_completed', {
+        page: 'checklist',
+        portfolio_size: lead.portfolioSize,
+        manage_style: lead.manageStyle,
+        main_concern: lead.mainConcern,
+        price: lead.price,
+        referrer: lead.referrer,
+        device: lead.device,
+        source: lead.source
+      });
 
       localStorage.removeItem(INDEX_PRELEAD_KEY);
       document.getElementById('emailGate').classList.add('hidden');
@@ -1404,12 +1494,22 @@
     }
 
     // ── Gate price selection ──
-    function selectGatePrice(el) {
-      document.querySelectorAll('#gatePriceOptions .price-option').forEach(function(opt) {
+    function selectSingleOption(groupId, el) {
+      document.querySelectorAll('#' + groupId + ' .price-option').forEach(function(opt) {
         opt.classList.remove('selected');
       });
       el.classList.add('selected');
       el.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function selectSavedOption(groupId, value) {
+      const option = document.querySelector('#' + groupId + ' input[value="' + value + '"]');
+      if (!option) return;
+      selectSingleOption(groupId, option.closest('.price-option'));
+    }
+
+    function selectGatePrice(el) {
+      selectSingleOption('gatePriceOptions', el);
     }
 
     // ── Follow-up poll ──
@@ -1432,6 +1532,11 @@
         value: selected.value,
         date: new Date().toISOString()
       }));
+
+      trackClick('product_priority_selected', {
+        page: 'checklist',
+        value: selected.value
+      });
 
       document.getElementById('pollSubmit').style.display = 'none';
       document.getElementById('priceOptions').style.display = 'none';
